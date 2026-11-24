@@ -206,6 +206,30 @@ class CirclePainter<R extends Object> extends CustomPainter
   bool shouldRepaint(CirclePainter oldDelegate) =>
       circles != oldDelegate.circles || camera != oldDelegate.camera;
 
+  @override
+  SemanticsBuilderCallback? get semanticsBuilder =>
+      circles.any((c) => c.semanticsIdentifier != null)
+          ? _semanticsNodes
+          : null;
+
+  List<CustomPainterSemantics> _semanticsNodes(Size size) {
+    final nodes = <CustomPainterSemantics>[];
+    final identifiers = <String>{};
+    for (final circle in circles) {
+      final identifier = circle.semanticsIdentifier;
+      if (identifier == null) continue;
+      final node = elementSemantics(
+        [_getOffset(circle.point)],
+        size: size,
+        identifier: identifier,
+        value: circle.semanticsValue,
+        margin: _getRadiusInPixel(circle) + circle.borderStrokeWidth / 2,
+      );
+      if (node != null && identifiers.add(identifier)) nodes.add(node);
+    }
+    return nodes;
+  }
+
   Offset _getOffset(LatLng pos) => camera.getOffsetFromOrigin(pos);
 
   // Cached number of pixels per meter.

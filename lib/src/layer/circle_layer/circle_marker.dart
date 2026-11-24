@@ -44,6 +44,9 @@ class CircleMarker<R extends Object> with HitDetectableElement<R> {
   @override
   final R? hitValue;
 
+  final String? semanticsIdentifier;
+  final String? semanticsValue;
+
   /// Constructor to create a new [CircleMarker] object
   const CircleMarker({
     required this.point,
@@ -56,5 +59,7 @@ class CircleMarker<R extends Object> with HitDetectableElement<R> {
     this.glow,
     this.shadow,
     this.hitValue,
+    this.semanticsIdentifier,
+    this.semanticsValue,
   });
 }

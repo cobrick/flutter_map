@@ -318,6 +318,7 @@ class _PolylinePainter<R extends Object> extends CustomPainter
 
   List<CustomPainterSemantics> _semanticsNodes(Size size) {
     final nodes = <CustomPainterSemantics>[];
+    final identifiers = <String>{};
     for (final projectedPolyline in polylines) {
       final polyline = projectedPolyline.polyline;
       final identifier = polyline.semanticsIdentifier;
@@ -332,7 +333,7 @@ class _PolylinePainter<R extends Object> extends CustomPainter
         value: polyline.semanticsValue,
         margin: strokeWidth / 2 + polyline.borderStrokeWidth / 2,
       );
-      if (node != null) nodes.add(node);
+      if (node != null && identifiers.add(identifier)) nodes.add(node);
     }
     return nodes;
   }

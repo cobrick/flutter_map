@@ -145,6 +145,7 @@ mixin FeatureLayerUtils on CustomPainter {
         .intersect(Offset.zero & size);
     if (rect.isEmpty) return null;
     return CustomPainterSemantics(
+      key: ValueKey(identifier),
       rect: rect,
       properties: SemanticsProperties(
         identifier: identifier,

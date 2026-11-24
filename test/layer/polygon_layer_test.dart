@@ -187,6 +187,32 @@ void main() {
       expect(anyIdentified(), findsNothing);
     });
 
+    testWidgets('a node stays with its polygon when an earlier one leaves',
+        (tester) async {
+      final b = square(semanticsIdentifier: 'shape.b', latitudeShift: -0.004);
+      await tester.pumpWidget(
+        TestApp(polygons: [square(semanticsIdentifier: 'shape.a'), b]),
+      );
+      final id = byIdentifier('shape.b').evaluate().single.id;
+
+      await tester.pumpWidget(TestApp(polygons: [b]));
+
+      expect(byIdentifier('shape.b').evaluate().single.id, id);
+    });
+
+    testWidgets('polygons sharing an identifier get one node', (tester) async {
+      await tester.pumpWidget(
+        TestApp(
+          polygons: [
+            square(semanticsIdentifier: 'shape.a'),
+            square(semanticsIdentifier: 'shape.a', latitudeShift: -0.004),
+          ],
+        ),
+      );
+
+      expect(byIdentifier('shape.a'), findsOne);
+    });
+
     test('semantics take part in equality but not in batching', () {
       expect(
         square(semanticsIdentifier: 'shape.a', semanticsValue: 'v'),

@@ -210,6 +210,53 @@ void main() {
       );
     });
 
+    testWidgets('a stroke in meters gives a node as tall as the stroke',
+        (tester) async {
+      final controller = MapController();
+      addTearDown(controller.dispose);
+
+      await tester.pumpWidget(
+        TestApp(
+          controller: controller,
+          polylines: [
+            Polyline(
+              points: const [start, LatLng(45.5231, -122.6665)],
+              strokeWidth: 200,
+              useStrokeWidthInMeter: true,
+              semanticsIdentifier: 'shape.a',
+            ),
+          ],
+        ),
+      );
+
+      final camera = controller.camera;
+      final strokeInPixels = (camera.getOffsetFromOrigin(start) -
+              camera.getOffsetFromOrigin(
+                const Distance().offset(start, 200, 180),
+              ))
+          .distance;
+      expect(
+        byIdentifier('shape.a').evaluate().single.rect.height,
+        closeTo(strokeInPixels, 1e-6),
+      );
+    });
+
+    testWidgets('polylines sharing an identifier get one node', (tester) async {
+      await tester.pumpWidget(
+        TestApp(
+          polylines: [
+            line(semanticsIdentifier: 'shape.a'),
+            line(
+              points: const [start, LatLng(45.5181, -122.6665)],
+              semanticsIdentifier: 'shape.a',
+            ),
+          ],
+        ),
+      );
+
+      expect(byIdentifier('shape.a'), findsOne);
+    });
+
     testWidgets('a layer without identifiers adds no node', (tester) async {
       await tester.pumpWidget(TestApp(polylines: [line()]));
 

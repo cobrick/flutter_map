@@ -567,6 +567,7 @@ class _PolygonPainter<R extends Object> extends CustomPainter
 
   List<CustomPainterSemantics> _semanticsNodes(Size size) {
     final nodes = <CustomPainterSemantics>[];
+    final identifiers = <String>{};
     for (final projectedPolygon in polygons) {
       final polygon = projectedPolygon.polygon;
       final identifier = polygon.semanticsIdentifier;
@@ -578,7 +579,7 @@ class _PolygonPainter<R extends Object> extends CustomPainter
         value: polygon.semanticsValue,
         margin: polygon.borderStrokeWidth / 2,
       );
-      if (node != null) nodes.add(node);
+      if (node != null && identifiers.add(identifier)) nodes.add(node);
     }
     return nodes;
   }

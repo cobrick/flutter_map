@@ -48,10 +48,7 @@ class Polyline<R extends Object> with HitDetectableElement<R> {
   @override
   final R? hitValue;
 
-  /// Identifier of a semantics node over this line's box; none without it
   final String? semanticsIdentifier;
-
-  /// Value of the node named by [semanticsIdentifier]
   final String? semanticsValue;
 
   LatLngBounds? _boundingBox;

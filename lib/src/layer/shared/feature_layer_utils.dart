@@ -120,8 +120,6 @@ mixin FeatureLayerUtils on CustomPainter {
               camera.getOffsetFromOrigin(_distance.offset(point, meters, 180)))
           .distance;
 
-  /// The semantics node over the box of [offsets], grown by [margin] and
-  /// clipped to the canvas; `null` if that leaves nothing
   CustomPainterSemantics? elementSemantics(
     List<Offset> offsets, {
     required Size size,

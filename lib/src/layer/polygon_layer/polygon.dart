@@ -92,10 +92,7 @@ class Polygon<R extends Object> with HitDetectableElement<R> {
   @override
   final R? hitValue;
 
-  /// Identifier of a semantics node over this polygon's box; none without it
   final String? semanticsIdentifier;
-
-  /// Value of the node named by [semanticsIdentifier]
   final String? semanticsValue;
 
   /// Designates whether the given polygon points follow a clock or

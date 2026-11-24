@@ -92,6 +92,9 @@ class Polygon<R extends Object> with HitDetectableElement<R> {
   @override
   final R? hitValue;
 
+  final String? semanticsIdentifier;
+  final String? semanticsValue;
+
   /// Designates whether the given polygon points follow a clock or
   /// anti-clockwise direction.
   /// This is respected during draw call batching for filled polygons.
@@ -155,6 +158,8 @@ class Polygon<R extends Object> with HitDetectableElement<R> {
     PolygonLabelPlacementCalculator? labelPlacementCalculator,
     this.rotateLabel = false,
     this.hitValue,
+    this.semanticsIdentifier,
+    this.semanticsValue,
   })  : _filledAndClockwise = color != null && isClockwise(points),
         labelPlacementCalculator = labelPlacementCalculator ??
             switch (labelPlacement) {
@@ -200,6 +205,8 @@ class Polygon<R extends Object> with HitDetectableElement<R> {
           labelPlacementCalculator == other.labelPlacementCalculator &&
           rotateLabel == other.rotateLabel &&
           hitValue == other.hitValue &&
+          semanticsIdentifier == other.semanticsIdentifier &&
+          semanticsValue == other.semanticsValue &&
           // Expensive computations last to take advantage of lazy logic gates
           listEquals(holePointsList, other.holePointsList) &&
           listEquals(points, other.points));
@@ -232,6 +239,8 @@ class Polygon<R extends Object> with HitDetectableElement<R> {
         labelPlacement,
         labelPlacementCalculator,
         rotateLabel,
+        semanticsIdentifier,
+        semanticsValue,
         renderHashCode,
       ]);
 }

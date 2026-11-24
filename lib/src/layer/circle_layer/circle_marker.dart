@@ -29,8 +29,23 @@ class CircleMarker<R extends Object> with HitDetectableElement<R> {
   /// Whether to treat [radius] as a measurement in meters instead of pixels.
   final bool useRadiusInMeter;
 
+  /// Optional halo painted around the circle
+  ///
+  /// Follows the filled disk, or only the border ring when [color] is fully
+  /// transparent.
+  final ShapeGlow? glow;
+
+  /// Optional shadow painted underneath the circle
+  ///
+  /// Follows the filled disk, or only the border ring when [color] is fully
+  /// transparent.
+  final ShapeShadow? shadow;
+
   @override
   final R? hitValue;
+
+  final String? semanticsIdentifier;
+  final String? semanticsValue;
 
   /// Constructor to create a new [CircleMarker] object
   const CircleMarker({
@@ -41,6 +56,10 @@ class CircleMarker<R extends Object> with HitDetectableElement<R> {
     this.color = const Color(0xFF00FF00),
     this.borderStrokeWidth = 0.0,
     this.borderColor = const Color(0xFFFFFF00),
+    this.glow,
+    this.shadow,
     this.hitValue,
+    this.semanticsIdentifier,
+    this.semanticsValue,
   });
 }

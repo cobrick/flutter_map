@@ -39,8 +39,17 @@ class Polyline<R extends Object> with HitDetectableElement<R> {
   /// Set to true if the width of the stroke should have meters as unit.
   final bool useStrokeWidthInMeter;
 
+  /// Optional halo painted around the line (and its border)
+  final ShapeGlow? glow;
+
+  /// Optional shadow painted underneath the line (and its border)
+  final ShapeShadow? shadow;
+
   @override
   final R? hitValue;
+
+  final String? semanticsIdentifier;
+  final String? semanticsValue;
 
   LatLngBounds? _boundingBox;
 
@@ -61,7 +70,11 @@ class Polyline<R extends Object> with HitDetectableElement<R> {
     this.strokeCap = StrokeCap.round,
     this.strokeJoin = StrokeJoin.round,
     this.useStrokeWidthInMeter = false,
+    this.glow,
+    this.shadow,
     this.hitValue,
+    this.semanticsIdentifier,
+    this.semanticsValue,
   });
 
   @override
@@ -76,7 +89,11 @@ class Polyline<R extends Object> with HitDetectableElement<R> {
           strokeCap == other.strokeCap &&
           strokeJoin == other.strokeJoin &&
           useStrokeWidthInMeter == other.useStrokeWidthInMeter &&
+          glow == other.glow &&
+          shadow == other.shadow &&
           hitValue == other.hitValue &&
+          semanticsIdentifier == other.semanticsIdentifier &&
+          semanticsValue == other.semanticsValue &&
           // Expensive computations last to take advantage of lazy logic gates
           listEquals(colorsStop, other.colorsStop) &&
           listEquals(gradientColors, other.gradientColors) &&
@@ -97,10 +114,13 @@ class Polyline<R extends Object> with HitDetectableElement<R> {
         strokeCap,
         strokeJoin,
         useStrokeWidthInMeter,
+        glow,
+        shadow,
       );
 
   int? _hashCode;
 
   @override
-  int get hashCode => _hashCode ??= Object.hashAll([...points, renderHashCode]);
+  int get hashCode => _hashCode ??= Object.hashAll(
+      [...points, semanticsIdentifier, semanticsValue, renderHashCode]);
 }

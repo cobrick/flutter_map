@@ -48,6 +48,12 @@ class Polyline<R extends Object> with HitDetectableElement<R> {
   @override
   final R? hitValue;
 
+  /// Identifier of a semantics node over this line's box; none without it
+  final String? semanticsIdentifier;
+
+  /// Value of the node named by [semanticsIdentifier]
+  final String? semanticsValue;
+
   LatLngBounds? _boundingBox;
 
   /// Get the bounding box of the [points] (cached).
@@ -70,6 +76,8 @@ class Polyline<R extends Object> with HitDetectableElement<R> {
     this.glow,
     this.shadow,
     this.hitValue,
+    this.semanticsIdentifier,
+    this.semanticsValue,
   });
 
   @override
@@ -87,6 +95,8 @@ class Polyline<R extends Object> with HitDetectableElement<R> {
           glow == other.glow &&
           shadow == other.shadow &&
           hitValue == other.hitValue &&
+          semanticsIdentifier == other.semanticsIdentifier &&
+          semanticsValue == other.semanticsValue &&
           // Expensive computations last to take advantage of lazy logic gates
           listEquals(colorsStop, other.colorsStop) &&
           listEquals(gradientColors, other.gradientColors) &&
@@ -114,5 +124,6 @@ class Polyline<R extends Object> with HitDetectableElement<R> {
   int? _hashCode;
 
   @override
-  int get hashCode => _hashCode ??= Object.hashAll([...points, renderHashCode]);
+  int get hashCode => _hashCode ??= Object.hashAll(
+      [...points, semanticsIdentifier, semanticsValue, renderHashCode]);
 }

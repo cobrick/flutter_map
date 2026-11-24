@@ -310,6 +310,33 @@ class _PolylinePainter<R extends Object> extends CustomPainter
     drawPaths();
   }
 
+  @override
+  SemanticsBuilderCallback? get semanticsBuilder =>
+      polylines.any((p) => p.polyline.semanticsIdentifier != null)
+          ? _semanticsNodes
+          : null;
+
+  List<CustomPainterSemantics> _semanticsNodes(Size size) {
+    final nodes = <CustomPainterSemantics>[];
+    for (final projectedPolyline in polylines) {
+      final polyline = projectedPolyline.polyline;
+      final identifier = polyline.semanticsIdentifier;
+      if (identifier == null || polyline.points.isEmpty) continue;
+      final strokeWidth = polyline.useStrokeWidthInMeter
+          ? metersToScreenPixels(polyline.points.first, polyline.strokeWidth)
+          : polyline.strokeWidth;
+      final node = elementSemantics(
+        _helper.getOffsetsXY(points: projectedPolyline.points).$1,
+        size: size,
+        identifier: identifier,
+        value: polyline.semanticsValue,
+        margin: strokeWidth / 2 + polyline.borderStrokeWidth / 2,
+      );
+      if (node != null) nodes.add(node);
+    }
+    return nodes;
+  }
+
   Paint _outlineEffectPaint(Paint effectPaint, Paint outlinePaint) =>
       effectPaint
         ..strokeWidth = outlinePaint.strokeWidth

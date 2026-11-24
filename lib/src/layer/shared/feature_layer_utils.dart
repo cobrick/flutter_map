@@ -1,3 +1,4 @@
+import 'package:flutter/semantics.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -118,6 +119,42 @@ mixin FeatureLayerUtils on CustomPainter {
       (camera.getOffsetFromOrigin(point) -
               camera.getOffsetFromOrigin(_distance.offset(point, meters, 180)))
           .distance;
+
+  /// The semantics node over the box of [offsets], grown by [margin] and
+  /// clipped to the canvas; `null` if that leaves nothing
+  CustomPainterSemantics? elementSemantics(
+    List<Offset> offsets, {
+    required Size size,
+    required String identifier,
+    required String? value,
+    double margin = 0,
+  }) {
+    if (offsets.isEmpty) return null;
+    double minX;
+    double maxX;
+    double minY;
+    double maxY;
+    minX = maxX = offsets.first.dx;
+    minY = maxY = offsets.first.dy;
+    for (final Offset offset in offsets) {
+      if (minX > offset.dx) minX = offset.dx;
+      if (minY > offset.dy) minY = offset.dy;
+      if (maxX < offset.dx) maxX = offset.dx;
+      if (maxY < offset.dy) maxY = offset.dy;
+    }
+    final rect = Rect.fromLTRB(minX, minY, maxX, maxY)
+        .inflate(margin)
+        .intersect(Offset.zero & size);
+    if (rect.isEmpty) return null;
+    return CustomPainterSemantics(
+      rect: rect,
+      properties: SemanticsProperties(
+        identifier: identifier,
+        value: value,
+        textDirection: TextDirection.ltr,
+      ),
+    );
+  }
 }
 
 /// Return type for the callback argument of

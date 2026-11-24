@@ -559,6 +559,30 @@ class _PolygonPainter<R extends Object> extends CustomPainter
     }
   }
 
+  @override
+  SemanticsBuilderCallback? get semanticsBuilder =>
+      polygons.any((p) => p.polygon.semanticsIdentifier != null)
+          ? _semanticsNodes
+          : null;
+
+  List<CustomPainterSemantics> _semanticsNodes(Size size) {
+    final nodes = <CustomPainterSemantics>[];
+    for (final projectedPolygon in polygons) {
+      final polygon = projectedPolygon.polygon;
+      final identifier = polygon.semanticsIdentifier;
+      if (identifier == null || projectedPolygon.points.isEmpty) continue;
+      final node = elementSemantics(
+        _helper.getOffsetsXY(points: projectedPolygon.points).$1,
+        size: size,
+        identifier: identifier,
+        value: polygon.semanticsValue,
+        margin: polygon.borderStrokeWidth / 2,
+      );
+      if (node != null) nodes.add(node);
+    }
+    return nodes;
+  }
+
   ({Offset min, Offset max}) _getBounds(Offset origin, Polygon polygon) {
     final bBox = polygon.boundingBox;
     return (
